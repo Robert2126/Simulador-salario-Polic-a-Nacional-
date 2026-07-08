@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Incremento del Básico - Policía Nacional</title>
+  <style>
+    :root {
+      --verde: #0f4c3a;
+      --verde-oscuro: #093426;
+      --verde-claro: #e8f3ee;
+      --dorado: #d7b56d;
+      --gris: #f5f7f8;
+      --texto: #1f2933;
+      --muted: #667085;
+      --borde: #d9e2ec;
+      --rojo: #b42318;
+      --blanco: #ffffff;
+      --sombra: 0 18px 45px rgba(15, 76, 58, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef7f2 100%);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
+      color: var(--blanco);
+      padding: 34px 18px 42px;
+      text-align: center;
+    }
+
+    header .badge {
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      color: #f8edd0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    header p {
+      max-width: 820px;
+      margin: 16px auto 0;
+      color: #dcefe7;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 28px));
+      margin: -28px auto 46px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.75fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 22px;
+      box-shadow: var(--sombra);
+      padding: 24px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      color: var(--verde-oscuro);
+      font-size: 1.28rem;
+    }
+
+    .card .sub {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.45;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #344054;
+      margin-bottom: 7px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 13px 12px;
+      font-size: 1rem;
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--verde);
+      box-shadow: 0 0 0 4px rgba(15, 76, 58, 0.12);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--verde);
+      color: var(--blanco);
+    }
+
+    .secondary {
+      background: var(--verde-claro);
+      color: var(--verde-oscuro);
+    }
+
+    .danger {
+      background: #fff1f0;
+      color: var(--rojo);
+    }
+
+    .results {
+      display: grid;
+      gap: 14px;
+    }
+
+    .result-box {
+      border-radius: 18px;
+      padding: 16px;
+      background: var(--gris);
+      border: 1px solid var(--borde);
+    }
+
+    .result-box .label {
+      color: var(--muted);
+      font-size: 0.83rem;
+      margin-bottom: 6px;
+    }
+
+    .result-box .value {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--verde-oscuro);
+      word-break: break-word;
+    }
+
+    .result-box.highlight {
+      background: linear-gradient(135deg, #fef9ea, #eef8f2);
+      border-color: rgba(215, 181, 109, 0.65);
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px;
+      border-left: 4px solid var(--dorado);
+      background: #fffaf0;
+      color: #5f4b1b;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.91rem;
+    }
+
+    .table-card {
+      margin-top: 20px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      background: var(--blanco);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--borde);
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--verde-claro);
+      color: var(--verde-oscuro);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 22px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.86rem;
+      padding: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      main {
+        width: min(100% - 18px, 1180px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="badge">Herramienta de cálculo referencial</span>
+    <h1>Simulador de incremento del básico</h1>
+    <p>
+      Calcula de forma referencial el valor proyectado de la asignación básica mensual con un porcentaje de incremento. La herramienta permite comparar varios grados o funcionarios sin almacenar datos personales.
+    </p>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="Simulador principal">
+      <article class="card">
+        <h2>Datos de simulación</h2>
+        <p class="sub">Ingrese el valor actual del básico, el porcentaje de incremento y el número de meses a proyectar.</p>
+
+        <div class="form-grid">
+          <div>
+            <label for="grado">Grado o categoría</label>
+            <select id="grado">
+              <option value="">Seleccione una opción</option>
+              <option>Patrullero</option>
+              <option>Subintendente</option>
+              <option>Intendente</option>
+              <option>Intendente Jefe</option>
+              <option>Subcomisario</option>
+              <option>Comisario</option>
+              <option>Subteniente</option>
+              <option>Teniente</option>
+              <option>Capitán</option>
+              <option>Mayor</option>
+              <option>Teniente Coronel</option>
+              <option>Coronel</option>
+              <option>Brigadier General</option>
+              <option>Mayor General</option>
+              <option>General</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="nombre">Referencia interna opcional</label>
+            <input id="nombre" type="text" placeholder="Ej.: Funcionario 01" />
+          </div>
+
+          <div>
+            <label for="basico">Básico actual mensual</label>
+            <input id="basico" type="text" inputmode="numeric" placeholder="Ej.: 2500000" />
+          </div>
+
+          <div>
+            <label for="incremento">Incremento (%)</label>
+            <input id="incremento" type="number" step="0.01" min="0" placeholder="Ej.: 7.5" />
+          </div>
+
+          <div>
+            <label for="meses">Meses a proyectar</label>
+            <input id="meses" type="number" min="1" step="1" value="12" />
+          </div>
+
+          <div>
+            <label for="redondeo">Redondeo</label>
+            <select id="redondeo">
+              <option value="0">Sin decimales</option>
+              <option value="100">A la centena</option>
+              <option value="1000">Al millar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="calcular">Calcular</button>
+          <button class="secondary" id="agregar">Agregar a tabla</button>
+          <button class="secondary" id="exportar">Exportar CSV</button>
+          <button class="danger" id="limpiar">Limpiar tabla</button>
+        </div>
+
+        <div class="note">
+          <strong>Advertencia técnica:</strong> este simulador no liquida nómina oficial. Solo calcula el efecto matemático del incremento sobre la asignación básica ingresada. No incluye primas, subsidios, bonificaciones, deducciones, retenciones, aportes, retroactivos normativos ni factores prestacionales.
+        </div>
+      </article>
+
+      <aside class="card">
+        <h2>Resultado</h2>
+        <p class="sub">Valores calculados con la información registrada.</p>
+        <div class="results">
+          <div class="result-box">
+            <div class="label">Básico actual</div>
+            <div class="value" id="rBasico">$ 0</div>
+          </div>
+          <div class="result-box">
+            <div class="label">Aumento mensual estimado</div>
+            <div class="value" id="rAumento">$ 0</div>
+          </div>
+          <div class="result-box highlight">
+            <div class="label">Nuevo básico mensual</div>
+            <div class="value" id="rNuevo">$ 0</div>
+          </div>
+          <div class="result-box">
+            <div class="label">Incremento acumulado proyectado</div>
+            <div class="value" id="rAcumulado">$ 0</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card table-card">
+      <h2>Comparativo de simulaciones</h2>
+      <p class="sub">Agregue varios registros para comparar el efecto del incremento por grado o referencia interna.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Referencia</th>
+              <th>Grado</th>
+              <th>Básico actual</th>
+              <th>Incremento</th>
+              <th>Aumento mensual</th>
+              <th>Nuevo básico</th>
+              <th>Meses</th>
+              <th>Acumulado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla">
+            <tr><td colspan="8" class="empty">No hay simulaciones agregadas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Simulador referencial. Verifique siempre los valores oficiales y la normatividad vigente antes de usar resultados en documentos administrativos.
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const tabla = $('tabla');
+    const registros = [];
+
+    function limpiarNumero(valor) {
+      return Number(String(valor || '').replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function formatoCOP(valor) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0
+      }).format(valor);
+    }
+
+    function aplicarRedondeo(valor) {
+      const modo = Number($('redondeo').value);
+      if (!modo) return Math.round(valor);
+      return Math.round(valor / modo) * modo;
+    }
+
+    function calcular() {
+      const basico = limpiarNumero($('basico').value);
+      const incremento = Number($('incremento').value) || 0;
+      const meses = Math.max(1, Number($('meses').value) || 1);
+      const aumento = aplicarRedondeo(basico * (incremento / 100));
+      const nuevo = aplicarRedondeo(basico + aumento);
+      const acumulado = aplicarRedondeo(aumento * meses);
+
+      $('rBasico').textContent = formatoCOP(basico);
+      $('rAumento').textContent = formatoCOP(aumento);
+      $('rNuevo').textContent = formatoCOP(nuevo);
+      $('rAcumulado').textContent = formatoCOP(acumulado);
+
+      return {
+        referencia: $('nombre').value.trim() || 'Sin referencia',
+        grado: $('grado').value || 'No especificado',
+        basico,
+        incremento,
+        aumento,
+        nuevo,
+        meses,
+        acumulado
+      };
+    }
+
+    function renderTabla() {
+      if (!registros.length) {
+        tabla.innerHTML = '<tr><td colspan="8" class="empty">No hay simulaciones agregadas.</td></tr>';
+        return;
+      }
+
+      tabla.innerHTML = registros.map((r) => `
+        <tr>
+          <td>${r.referencia}</td>
+          <td>${r.grado}</td>
+          <td>${formatoCOP(r.basico)}</td>
+          <td>${r.incremento.toFixed(2)}%</td>
+          <td>${formatoCOP(r.aumento)}</td>
+          <td>${formatoCOP(r.nuevo)}</td>
+          <td>${r.meses}</td>
+          <td>${formatoCOP(r.acumulado)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function agregarRegistro() {
+      const dato = calcular();
+      if (dato.basico <= 0) {
+        alert('Ingrese un básico actual mensual válido.');
+        return;
+      }
+      registros.push(dato);
+      renderTabla();
+    }
+
+    function exportarCSV() {
+      if (!registros.length) {
+        alert('No hay registros para exportar.');
+        return;
+      }
+
+      const encabezados = ['Referencia', 'Grado', 'Basico actual', 'Incremento %', 'Aumento mensual', 'Nuevo basico', 'Meses', 'Acumulado'];
+      const filas = registros.map((r) => [r.referencia, r.grado, r.basico, r.incremento, r.aumento, r.nuevo, r.meses, r.acumulado]);
+      const csv = [encabezados, ...filas].map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(';')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'simulador_incremento_basico_policia.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function limpiarTabla() {
+      registros.length = 0;
+      renderTabla();
+    }
+
+    $('calcular').addEventListener('click', calcular);
+    $('agregar').addEventListener('click', agregarRegistro);
+    $('exportar').addEventListener('click', exportarCSV);
+    $('limpiar').addEventListener('click', limpiarTabla);
+    $('basico').addEventListener('input', calcular);
+    $('incremento').addEventListener('input', calcular);
+    $('meses').addEventListener('input', calcular);
+    $('redondeo').addEventListener('change', calcular);
+
+    calcular();
+  </script>
+</body>
+</html>
