@@ -1,4 +1,4 @@
-# Simulador inteligente de incremento del básico - Policía Nacional
+# Simulador IA de incremento del básico - Policía Nacional
 
 Página estática para calcular de forma referencial el efecto de un porcentaje de incremento sobre la asignación básica mensual de integrantes de la Policía Nacional.
 
@@ -10,35 +10,49 @@ Página estática para calcular de forma referencial el efecto de un porcentaje 
 - Comparativo por grado o referencia interna.
 - Exportación de resultados en archivo CSV.
 - Diseño adaptable a computador y celular.
-- Asistente inteligente local con aprendizaje basado en las simulaciones guardadas en el navegador.
+- Consulta de fuentes salariales públicas en internet.
+- Modelo salarial por grado con porcentajes aprendidos desde fuentes web.
+- Asistente local que valida consistencia, diferencias y patrones.
+- Conector opcional a backend de IA generativa con búsqueda web.
 
-## Asistente IA local
+## Fuentes salariales e internet
 
-El asistente no usa servidores externos ni API de inteligencia artificial. Su funcionamiento es local y se basa en reglas de análisis y patrones aprendidos del historial registrado en el navegador mediante `localStorage`.
+El simulador incorpora un botón **Actualizar desde internet**. Este intenta leer fuentes públicas sobre incrementos salariales de la Policía Nacional y extraer porcentajes por grado.
 
-Puede generar:
+La herramienta incluye una base semilla con porcentajes reportados públicamente para 2026. Esta base debe tratarse como orientativa hasta que se contraste con fuente normativa oficial, como decreto vigente, Diario Oficial, Función Pública, SUIN-Juriscol o Presidencia.
 
-- Alertas cuando falta el básico, el incremento o el grado.
-- Advertencias cuando el básico ingresado se aleja del promedio aprendido.
-- Comparaciones entre el incremento actual y el incremento promedio histórico.
-- Sugerencias específicas por grado cuando existen suficientes registros comparables.
-- Identificación del mayor impacto mensual aprendido.
-- Nivel de confianza del análisis: baja, media o alta, según el número de registros guardados.
+## IA avanzada con backend
 
-## Uso
+Una página estática de GitHub Pages no debe contener una API key de IA. Por seguridad, la IA generativa con navegación web debe ejecutarse desde un backend.
+
+Se agregó el archivo:
+
+```text
+backend/openai-worker.example.js
+```
+
+Ese archivo muestra cómo crear un backend tipo serverless que:
+
+1. Recibe la simulación desde el frontend.
+2. Recibe el historial local y el modelo salarial aprendido.
+3. Consulta la API de OpenAI desde el servidor.
+4. Usa herramienta de búsqueda web.
+5. Devuelve un análisis técnico al simulador.
+
+## Uso básico
 
 1. Abra el archivo `index.html` en el navegador.
 2. Seleccione el grado o categoría.
 3. Ingrese el básico actual mensual.
-4. Registre el porcentaje de incremento.
-5. Defina los meses a proyectar.
+4. Presione **Actualizar desde internet**.
+5. Presione **Aplicar incremento web** si desea usar el porcentaje aprendido para ese grado.
 6. Presione **Calcular** para ver el resultado inmediato.
-7. Presione **Agregar y aprender** para guardar el caso y alimentar el asistente local.
-8. Presione **Consultar IA local** para generar recomendaciones con base en el historial.
+7. Presione **Agregar y aprender** para guardar el caso y alimentar el aprendizaje local.
+8. Opcionalmente, configure una URL de backend IA y presione **Consultar backend IA**.
 
 ## Privacidad
 
-Los registros quedan almacenados únicamente en el navegador del usuario. No se envían datos a servidores externos.
+Los registros de simulación quedan almacenados en el navegador del usuario mediante `localStorage`. Si se configura un backend IA, el frontend enviará al backend la simulación, el historial y el modelo salarial aprendido. Antes de usarlo en producción, debe revisarse la política de tratamiento de datos.
 
 ## Publicación en GitHub Pages
 
