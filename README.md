@@ -1,4 +1,4 @@
-# Simulador IA de incremento del básico - Policía Nacional
+# Simulador incremento del básico - Policía Nacional
 
 Página estática para calcular de forma referencial el efecto de un porcentaje de incremento sobre la asignación básica mensual de integrantes de la Policía Nacional.
 
