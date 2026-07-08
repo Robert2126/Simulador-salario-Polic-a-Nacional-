@@ -3,807 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador Inteligente de Incremento del Básico - Policía Nacional</title>
+  <title>Simulador IA de incremento salarial - Policía Nacional</title>
   <style>
-    :root {
-      --verde: #0f4c3a;
-      --verde-oscuro: #093426;
-      --verde-claro: #e8f3ee;
-      --dorado: #d7b56d;
-      --azul: #1849a9;
-      --azul-claro: #eff4ff;
-      --gris: #f5f7f8;
-      --texto: #1f2933;
-      --muted: #667085;
-      --borde: #d9e2ec;
-      --rojo: #b42318;
-      --rojo-claro: #fff1f0;
-      --ambar: #b54708;
-      --ambar-claro: #fffaeb;
-      --blanco: #ffffff;
-      --sombra: 0 18px 45px rgba(15, 76, 58, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #eef7f2 100%);
-      color: var(--texto);
-      min-height: 100vh;
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
-      color: var(--blanco);
-      padding: 34px 18px 44px;
-      text-align: center;
-    }
-
-    header .badge {
-      display: inline-block;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      color: #f8edd0;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 1.1;
-    }
-
-    header p {
-      max-width: 900px;
-      margin: 16px auto 0;
-      color: #dcefe7;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    main {
-      width: min(1220px, calc(100% - 28px));
-      margin: -28px auto 46px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
-      gap: 20px;
-      align-items: start;
-    }
-
-    .card {
-      background: var(--blanco);
-      border: 1px solid var(--borde);
-      border-radius: 22px;
-      box-shadow: var(--sombra);
-      padding: 24px;
-    }
-
-    .card h2 {
-      margin: 0 0 8px;
-      color: var(--verde-oscuro);
-      font-size: 1.28rem;
-    }
-
-    .card .sub {
-      margin: 0 0 20px;
-      color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.45;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: #344054;
-      margin-bottom: 7px;
-    }
-
-    input, select {
-      width: 100%;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 13px 12px;
-      font-size: 1rem;
-      outline: none;
-      background: #ffffff;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--verde);
-      box-shadow: 0 0 0 4px rgba(15, 76, 58, 0.12);
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s, opacity 0.15s;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .primary {
-      background: var(--verde);
-      color: var(--blanco);
-    }
-
-    .secondary {
-      background: var(--verde-claro);
-      color: var(--verde-oscuro);
-    }
-
-    .blue {
-      background: var(--azul-claro);
-      color: var(--azul);
-    }
-
-    .danger {
-      background: var(--rojo-claro);
-      color: var(--rojo);
-    }
-
-    .results {
-      display: grid;
-      gap: 14px;
-    }
-
-    .result-box {
-      border-radius: 18px;
-      padding: 16px;
-      background: var(--gris);
-      border: 1px solid var(--borde);
-    }
-
-    .result-box .label {
-      color: var(--muted);
-      font-size: 0.83rem;
-      margin-bottom: 6px;
-    }
-
-    .result-box .value {
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: var(--verde-oscuro);
-      word-break: break-word;
-    }
-
-    .result-box.highlight {
-      background: linear-gradient(135deg, #fef9ea, #eef8f2);
-      border-color: rgba(215, 181, 109, 0.65);
-    }
-
-    .note {
-      margin-top: 16px;
-      padding: 14px;
-      border-left: 4px solid var(--dorado);
-      background: #fffaf0;
-      color: #5f4b1b;
-      border-radius: 10px;
-      line-height: 1.45;
-      font-size: 0.91rem;
-    }
-
-    .ai-card {
-      margin-top: 20px;
-      border: 1px solid #b2ccff;
-      background: linear-gradient(135deg, #ffffff, #f5f8ff);
-    }
-
-    .ai-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 14px;
-    }
-
-    .ai-chip {
-      display: inline-block;
-      border-radius: 999px;
-      background: var(--azul-claro);
-      color: var(--azul);
-      border: 1px solid #b2ccff;
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 7px 10px;
-      white-space: nowrap;
-    }
-
-    .ai-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin: 12px 0 16px;
-    }
-
-    .metric {
-      padding: 12px;
-      border-radius: 14px;
-      background: #ffffff;
-      border: 1px solid #d6e4ff;
-    }
-
-    .metric span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.76rem;
-      margin-bottom: 5px;
-    }
-
-    .metric strong {
-      color: var(--azul);
-      font-size: 1.05rem;
-    }
-
-    .suggestions {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .suggestions li {
-      padding: 12px 12px 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--borde);
-      background: #ffffff;
-      line-height: 1.42;
-      font-size: 0.92rem;
-    }
-
-    .suggestions li.info {
-      border-left: 5px solid var(--azul);
-    }
-
-    .suggestions li.ok {
-      border-left: 5px solid var(--verde);
-    }
-
-    .suggestions li.warning {
-      border-left: 5px solid var(--ambar);
-      background: var(--ambar-claro);
-    }
-
-    .suggestions li.alert {
-      border-left: 5px solid var(--rojo);
-      background: var(--rojo-claro);
-    }
-
-    .table-card {
-      margin-top: 20px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--borde);
-      border-radius: 18px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 840px;
-      background: var(--blanco);
-    }
-
-    th, td {
-      text-align: left;
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--borde);
-      font-size: 0.92rem;
-    }
-
-    th {
-      background: var(--verde-claro);
-      color: var(--verde-oscuro);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .empty {
-      color: var(--muted);
-      text-align: center;
-      padding: 22px;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.86rem;
-      padding: 20px;
-    }
-
-    @media (max-width: 940px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 680px) {
-      .form-grid, .ai-metrics {
-        grid-template-columns: 1fr;
-      }
-
-      .ai-head {
-        display: block;
-      }
-
-      .ai-chip {
-        margin-top: 10px;
-      }
-
-      .card {
-        padding: 18px;
-      }
-
-      main {
-        width: min(100% - 18px, 1220px);
-      }
-    }
+    :root{--verde:#0f4c3a;--verde2:#093426;--verde3:#e8f3ee;--azul:#1849a9;--azul2:#eff4ff;--dorado:#d7b56d;--gris:#f5f7f8;--texto:#1f2933;--muted:#667085;--borde:#d9e2ec;--rojo:#b42318;--rojo2:#fff1f0;--ambar:#b54708;--ambar2:#fffaeb;--blanco:#fff;--sombra:0 18px 45px rgba(15,76,58,.12)}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#f8fafc 0%,#eef7f2 100%);color:var(--texto);min-height:100vh}header{background:linear-gradient(135deg,var(--verde2),var(--verde));color:#fff;padding:34px 18px 44px;text-align:center}header .badge{display:inline-block;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 14px;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;color:#f8edd0}h1{margin:0;font-size:clamp(1.8rem,4vw,3rem);line-height:1.1}header p{max-width:980px;margin:16px auto 0;color:#dcefe7;font-size:1rem;line-height:1.6}main{width:min(1240px,calc(100% - 28px));margin:-28px auto 46px}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.78fr);gap:20px;align-items:start}.card{background:#fff;border:1px solid var(--borde);border-radius:22px;box-shadow:var(--sombra);padding:24px}.card h2{margin:0 0 8px;color:var(--verde2);font-size:1.28rem}.sub{margin:0 0 20px;color:var(--muted);font-size:.94rem;line-height:1.45}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}label{display:block;font-size:.84rem;font-weight:700;color:#344054;margin-bottom:7px}input,select,textarea{width:100%;border:1px solid var(--borde);border-radius:14px;padding:13px 12px;font-size:1rem;outline:none;background:#fff;transition:border-color .2s,box-shadow .2s}textarea{min-height:120px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(15,76,58,.12)}.full{grid-column:1/-1}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s}button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:not-allowed}.primary{background:var(--verde);color:#fff}.secondary{background:var(--verde3);color:var(--verde2)}.blue{background:var(--azul2);color:var(--azul)}.danger{background:var(--rojo2);color:var(--rojo)}.results{display:grid;gap:14px}.result-box{border-radius:18px;padding:16px;background:var(--gris);border:1px solid var(--borde)}.result-box .label{color:var(--muted);font-size:.83rem;margin-bottom:6px}.result-box .value{font-size:1.52rem;font-weight:800;color:var(--verde2);word-break:break-word}.highlight{background:linear-gradient(135deg,#fef9ea,#eef8f2)!important;border-color:rgba(215,181,109,.65)!important}.note{margin-top:16px;padding:14px;border-left:4px solid var(--dorado);background:#fffaf0;color:#5f4b1b;border-radius:10px;line-height:1.45;font-size:.91rem}.ai-card{margin-top:20px;border:1px solid #b2ccff;background:linear-gradient(135deg,#fff,#f5f8ff)}.ai-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}.chip{display:inline-block;border-radius:999px;background:var(--azul2);color:var(--azul);border:1px solid #b2ccff;font-size:.78rem;font-weight:800;padding:7px 10px;white-space:nowrap}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 16px}.metric{padding:12px;border-radius:14px;background:#fff;border:1px solid #d6e4ff}.metric span{display:block;color:var(--muted);font-size:.76rem;margin-bottom:5px}.metric strong{color:var(--azul);font-size:1.03rem}.suggestions{display:grid;gap:10px;margin:0;padding:0;list-style:none}.suggestions li{padding:12px 12px 12px 14px;border-radius:14px;border:1px solid var(--borde);background:#fff;line-height:1.42;font-size:.92rem}.info{border-left:5px solid var(--azul)!important}.ok{border-left:5px solid var(--verde)!important}.warning{border-left:5px solid var(--ambar)!important;background:var(--ambar2)!important}.alert{border-left:5px solid var(--rojo)!important;background:var(--rojo2)!important}.table-card{margin-top:20px}.table-wrap{overflow-x:auto;border:1px solid var(--borde);border-radius:18px}table{width:100%;border-collapse:collapse;min-width:880px;background:#fff}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--borde);font-size:.92rem}th{background:var(--verde3);color:var(--verde2);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}.empty{color:var(--muted);text-align:center;padding:22px}.source-list{font-size:.88rem;color:var(--muted);line-height:1.45}.source-list a{color:var(--azul);word-break:break-word}.status{font-size:.88rem;color:var(--muted);margin-top:10px;line-height:1.45}.mono{font-family:Consolas,Monaco,monospace;font-size:.86rem}.internet-box{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ai-output{white-space:pre-wrap;background:#fff;border:1px solid #d6e4ff;border-radius:16px;padding:14px;line-height:1.45;min-height:92px}footer{text-align:center;color:var(--muted);font-size:.86rem;padding:20px}@media(max-width:980px){.grid,.internet-box{grid-template-columns:1fr}}@media(max-width:720px){.form-grid,.metrics{grid-template-columns:1fr}.ai-head{display:block}.chip{margin-top:10px}.card{padding:18px}main{width:min(100% - 18px,1240px)}}
   </style>
 </head>
 <body>
   <header>
-    <span class="badge">Herramienta de cálculo referencial con asistente inteligente local</span>
-    <h1>Simulador inteligente de incremento del básico</h1>
-    <p>
-      Calcula el valor proyectado de la asignación básica mensual con un porcentaje de incremento y genera sugerencias automáticas a partir del historial guardado en el navegador.
-    </p>
+    <span class="badge">Simulador con IA, internet y aprendizaje salarial</span>
+    <h1>Simulador IA de incremento del básico</h1>
+    <p>Calcula la asignación básica proyectada, consulta fuentes salariales públicas en internet, aprende patrones por grado y permite conectar un backend de IA para análisis con búsqueda web.</p>
   </header>
 
   <main>
-    <section class="grid" aria-label="Simulador principal">
+    <section class="grid">
       <article class="card">
         <h2>Datos de simulación</h2>
-        <p class="sub">Ingrese el básico actual, el porcentaje de incremento y el número de meses a proyectar.</p>
-
+        <p class="sub">Ingrese el básico actual, seleccione el grado y aplique un incremento manual o sugerido por fuentes salariales consultadas en internet.</p>
         <div class="form-grid">
           <div>
             <label for="grado">Grado o categoría</label>
             <select id="grado">
               <option value="">Seleccione una opción</option>
-              <option>Patrullero</option>
-              <option>Subintendente</option>
-              <option>Intendente</option>
-              <option>Intendente Jefe</option>
-              <option>Subcomisario</option>
-              <option>Comisario</option>
-              <option>Subteniente</option>
-              <option>Teniente</option>
-              <option>Capitán</option>
-              <option>Mayor</option>
-              <option>Teniente Coronel</option>
-              <option>Coronel</option>
-              <option>Brigadier General</option>
-              <option>Mayor General</option>
-              <option>General</option>
-              <option>Otro</option>
+              <option>General</option><option>Mayor General</option><option>Brigadier General</option><option>Coronel</option><option>Teniente Coronel</option><option>Mayor</option><option>Capitán</option><option>Teniente</option><option>Subteniente</option>
+              <option>Comisario</option><option>Subcomisario</option><option>Intendente Jefe</option><option>Intendente</option><option>Subintendente</option><option>Patrullero</option>
+              <option>Agente menor a 5 años</option><option>Agente 5 a 10 años</option><option>Agente 10 o más años</option><option>Otro</option>
             </select>
           </div>
-
-          <div>
-            <label for="nombre">Referencia interna opcional</label>
-            <input id="nombre" type="text" placeholder="Ej.: Funcionario 01" />
-          </div>
-
-          <div>
-            <label for="basico">Básico actual mensual</label>
-            <input id="basico" type="text" inputmode="numeric" placeholder="Ej.: 2500000" />
-          </div>
-
-          <div>
-            <label for="incremento">Incremento (%)</label>
-            <input id="incremento" type="number" step="0.01" min="0" placeholder="Ej.: 7.5" />
-          </div>
-
-          <div>
-            <label for="meses">Meses a proyectar</label>
-            <input id="meses" type="number" min="1" step="1" value="12" />
-          </div>
-
-          <div>
-            <label for="redondeo">Redondeo</label>
-            <select id="redondeo">
-              <option value="0">Sin decimales</option>
-              <option value="100">A la centena</option>
-              <option value="1000">Al millar</option>
-            </select>
-          </div>
+          <div><label for="nombre">Referencia interna opcional</label><input id="nombre" type="text" placeholder="Ej.: Funcionario 01" /></div>
+          <div><label for="basico">Básico actual mensual</label><input id="basico" type="text" inputmode="numeric" placeholder="Ej.: 2500000" /></div>
+          <div><label for="incremento">Incremento (%)</label><input id="incremento" type="number" step="0.0001" min="0" placeholder="Ej.: 25.3733" /></div>
+          <div><label for="meses">Meses a proyectar</label><input id="meses" type="number" min="1" step="1" value="12" /></div>
+          <div><label for="redondeo">Redondeo</label><select id="redondeo"><option value="0">Sin decimales</option><option value="100">A la centena</option><option value="1000">Al millar</option></select></div>
         </div>
-
         <div class="actions">
           <button class="primary" id="calcular">Calcular</button>
+          <button class="blue" id="aplicarWeb">Aplicar incremento web</button>
           <button class="secondary" id="agregar">Agregar y aprender</button>
-          <button class="blue" id="analizar">Consultar IA local</button>
+          <button class="blue" id="actualizarInternet">Actualizar desde internet</button>
           <button class="secondary" id="exportar">Exportar CSV</button>
           <button class="danger" id="limpiar">Limpiar tabla</button>
           <button class="danger" id="resetIA">Reiniciar aprendizaje</button>
         </div>
-
-        <div class="note">
-          <strong>Advertencia técnica:</strong> este simulador no liquida nómina oficial. Solo calcula el efecto matemático del incremento sobre la asignación básica ingresada. No incluye primas, subsidios, bonificaciones, deducciones, retenciones, aportes, retroactivos normativos ni factores prestacionales.
-        </div>
+        <div class="note"><strong>Advertencia técnica:</strong> la herramienta no liquida nómina oficial. El básico debe validarse con la tabla salarial vigente y la norma aplicable. Los porcentajes web son insumos de orientación y requieren verificación jurídica.</div>
       </article>
 
       <aside class="card">
         <h2>Resultado</h2>
         <p class="sub">Valores calculados con la información registrada.</p>
         <div class="results">
-          <div class="result-box">
-            <div class="label">Básico actual</div>
-            <div class="value" id="rBasico">$ 0</div>
-          </div>
-          <div class="result-box">
-            <div class="label">Aumento mensual estimado</div>
-            <div class="value" id="rAumento">$ 0</div>
-          </div>
-          <div class="result-box highlight">
-            <div class="label">Nuevo básico mensual</div>
-            <div class="value" id="rNuevo">$ 0</div>
-          </div>
-          <div class="result-box">
-            <div class="label">Incremento acumulado proyectado</div>
-            <div class="value" id="rAcumulado">$ 0</div>
-          </div>
+          <div class="result-box"><div class="label">Básico actual</div><div class="value" id="rBasico">$ 0</div></div>
+          <div class="result-box"><div class="label">Aumento mensual estimado</div><div class="value" id="rAumento">$ 0</div></div>
+          <div class="result-box highlight"><div class="label">Nuevo básico mensual</div><div class="value" id="rNuevo">$ 0</div></div>
+          <div class="result-box"><div class="label">Incremento acumulado proyectado</div><div class="value" id="rAcumulado">$ 0</div></div>
         </div>
       </aside>
     </section>
 
-    <section class="card ai-card" aria-label="Asistente inteligente local">
+    <section class="card ai-card">
       <div class="ai-head">
+        <div><h2>IA conectada a internet y salarios policiales</h2><p class="sub">Consulta fuentes públicas, extrae porcentajes por grado, aprende del historial y emite sugerencias de consistencia salarial.</p></div>
+        <span class="chip" id="estadoIA">Base inicial cargada</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span>Registros aprendidos</span><strong id="mRegistros">0</strong></div>
+        <div class="metric"><span>Incremento histórico</span><strong id="mPromedio">0%</strong></div>
+        <div class="metric"><span>Fuente salarial</span><strong id="mFuente">Semilla web</strong></div>
+        <div class="metric"><span>Confianza</span><strong id="mConfianza">Baja</strong></div>
+      </div>
+      <ul class="suggestions" id="sugerencias"><li class="info">Seleccione un grado y presione “Actualizar desde internet” para consultar fuentes salariales públicas.</li></ul>
+      <p class="status" id="estadoInternet">Estado internet: pendiente de consulta.</p>
+    </section>
+
+    <section class="card table-card">
+      <h2>Conector de IA avanzada</h2>
+      <p class="sub">Para una IA generativa con navegación web real, use un backend seguro. No coloque llaves API dentro del HTML.</p>
+      <div class="internet-box">
         <div>
-          <h2>Asistente IA local</h2>
-          <p class="sub">Aprende de las simulaciones guardadas en este navegador y genera recomendaciones operativas, validaciones y alertas de consistencia.</p>
+          <label for="endpointIA">URL del backend IA opcional</label>
+          <input id="endpointIA" type="url" placeholder="Ej.: https://mi-worker.midominio.workers.dev" />
+          <div class="actions"><button class="blue" id="consultarBackend">Consultar backend IA</button></div>
+          <p class="status">El frontend enviará la simulación, el historial aprendido y el modelo salarial extraído de internet. El backend debe consultar fuentes oficiales o usar herramienta de búsqueda web.</p>
         </div>
-        <span class="ai-chip" id="estadoIA">Aprendizaje inicial</span>
-      </div>
-
-      <div class="ai-metrics">
-        <div class="metric">
-          <span>Registros aprendidos</span>
-          <strong id="mRegistros">0</strong>
-        </div>
-        <div class="metric">
-          <span>Incremento promedio</span>
-          <strong id="mPromedio">0%</strong>
-        </div>
-        <div class="metric">
-          <span>Confianza del análisis</span>
-          <strong id="mConfianza">Baja</strong>
+        <div>
+          <label>Respuesta IA / análisis</label>
+          <div class="ai-output" id="respuestaIA">Sin consulta avanzada.</div>
         </div>
       </div>
+    </section>
 
-      <ul class="suggestions" id="sugerencias">
-        <li class="info">Ingrese datos y agregue simulaciones para que el asistente empiece a identificar patrones.</li>
-      </ul>
+    <section class="card table-card">
+      <h2>Fuentes salariales consultadas</h2>
+      <p class="sub">La herramienta intenta leer estas fuentes desde internet mediante conexión del navegador. Si el sitio bloquea CORS, usa la base semilla incorporada y lo informa.</p>
+      <div class="source-list" id="fuentes"></div>
     </section>
 
     <section class="card table-card">
       <h2>Comparativo de simulaciones</h2>
-      <p class="sub">Agregue varios registros para comparar el efecto del incremento por grado o referencia interna. La tabla se conserva en este navegador.</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Referencia</th>
-              <th>Grado</th>
-              <th>Básico actual</th>
-              <th>Incremento</th>
-              <th>Aumento mensual</th>
-              <th>Nuevo básico</th>
-              <th>Meses</th>
-              <th>Acumulado</th>
-            </tr>
-          </thead>
-          <tbody id="tabla">
-            <tr><td colspan="8" class="empty">No hay simulaciones agregadas.</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <p class="sub">La tabla se conserva en este navegador y alimenta el aprendizaje local.</p>
+      <div class="table-wrap"><table><thead><tr><th>Referencia</th><th>Grado</th><th>Básico actual</th><th>Incremento</th><th>Aumento mensual</th><th>Nuevo básico</th><th>Meses</th><th>Acumulado</th><th>Origen</th></tr></thead><tbody id="tabla"><tr><td colspan="9" class="empty">No hay simulaciones agregadas.</td></tr></tbody></table></div>
     </section>
   </main>
-
-  <footer>
-    Simulador referencial. Verifique siempre los valores oficiales y la normatividad vigente antes de usar resultados en documentos administrativos.
-  </footer>
+  <footer>Simulador referencial. Verifique valores oficiales y normatividad vigente antes de usar resultados en actuaciones administrativas.</footer>
 
   <script>
-    const $ = (id) => document.getElementById(id);
-    const tabla = $('tabla');
-    const STORAGE_KEY = 'simulador_basico_policia_registros_v2';
-    const registros = cargarRegistros();
+    const $=id=>document.getElementById(id);
+    const STORAGE_KEY='simulador_policia_registros_v3';
+    const MODEL_KEY='simulador_policia_modelo_salarial_v3';
+    const registros=cargar(STORAGE_KEY,[]);
 
-    function cargarRegistros() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (error) {
-        return [];
+    const fuentesInternet=[
+      {nombre:'Tabla salarial Policía Nacional 2026 - fuente pública periodística',url:'https://www.tropicanafm.com/2026/tabla-salarial-de-la-policia-nacional-asi-quedo-el-sueldo-por-grado-y-bonificaciones-2026-459950.html'},
+      {nombre:'Sueldos Fuerza Pública 2026 - fuente pública periodística',url:'https://www.tropicanafm.com/2026/asi-quedaron-los-sueldos-de-oficiales-y-suboficiales-de-la-fuerza-publica-2026-salario-segun-rango-463143.html'}
+    ];
+
+    const modeloSemilla={
+      fuente:'Base semilla web 2026, pendiente de validación normativa oficial',
+      actualizado:new Date().toISOString(),
+      grados:{
+        'General':100.0000,'Mayor General':96.9064,'Brigadier General':86.6242,'Coronel':67.1283,'Teniente Coronel':52.3616,'Mayor':45.5288,'Capitán':37.4682,'Teniente':32.7292,'Subteniente':28.9366,
+        'Comisario':52.7816,'Subcomisario':44.8164,'Intendente Jefe':42.6660,'Intendente':40.5007,'Subintendente':31.8202,'Patrullero':25.3733,
+        'Agente menor a 5 años':15.5903,'Agente 5 a 10 años':18.3534,'Agente 10 o más años':18.8179
       }
+    };
+    let modeloSalarial=cargar(MODEL_KEY,modeloSemilla);
+
+    function cargar(key,fallback){try{return JSON.parse(localStorage.getItem(key))||fallback}catch{return fallback}}
+    function guardar(key,value){localStorage.setItem(key,JSON.stringify(value))}
+    function limpiarNumero(v){return Number(String(v||'').replace(/[^0-9.,]/g,'').replace(/\./g,'').replace(',','.'))||0}
+    function cop(v){return new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v)}
+    function html(v){return String(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')}
+    function redondear(v){const modo=Number($('redondeo').value);return modo?Math.round(v/modo)*modo:Math.round(v)}
+    function grado(){return $('grado').value||'No especificado'}
+    function incrementoWeb(g=grado()){return modeloSalarial.grados[g]||0}
+
+    function calcular(){
+      const basico=limpiarNumero($('basico').value);const incremento=Number($('incremento').value)||0;const meses=Math.max(1,Number($('meses').value)||1);
+      const aumento=redondear(basico*(incremento/100));const nuevo=redondear(basico+aumento);const acumulado=redondear(aumento*meses);
+      $('rBasico').textContent=cop(basico);$('rAumento').textContent=cop(aumento);$('rNuevo').textContent=cop(nuevo);$('rAcumulado').textContent=cop(acumulado);
+      return {referencia:$('nombre').value.trim()||'Sin referencia',grado:grado(),basico,incremento,aumento,nuevo,meses,acumulado,origen:incremento===incrementoWeb()?modeloSalarial.fuente:'Manual',fecha:new Date().toISOString()};
     }
 
-    function guardarRegistros() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(registros));
+    function aplicarIncrementoWeb(){
+      const inc=incrementoWeb();
+      if(!inc){alert('No hay incremento web aprendido para el grado seleccionado.');return}
+      $('incremento').value=inc.toFixed(4);calcular();analizarIA();
     }
 
-    function limpiarNumero(valor) {
-      return Number(String(valor || '').replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+    function agregarRegistro(){const dato=calcular();if(dato.basico<=0){alert('Ingrese un básico mensual válido.');return}if(dato.incremento<=0){alert('Ingrese o aplique un porcentaje de incremento mayor a cero.');return}registros.push(dato);guardar(STORAGE_KEY,registros);renderTabla();analizarIA()}
+    function promedio(lista,campo){return lista.length?lista.reduce((s,i)=>s+Number(i[campo]||0),0)/lista.length:0}
+    function confianza(n){if(n>=12)return'Alta';if(n>=6)return'Media';return'Baja'}
+
+    function renderTabla(){
+      if(!registros.length){$('tabla').innerHTML='<tr><td colspan="9" class="empty">No hay simulaciones agregadas.</td></tr>';return}
+      $('tabla').innerHTML=registros.map(r=>`<tr><td>${html(r.referencia)}</td><td>${html(r.grado)}</td><td>${cop(r.basico)}</td><td>${Number(r.incremento).toFixed(4)}%</td><td>${cop(r.aumento)}</td><td>${cop(r.nuevo)}</td><td>${r.meses}</td><td>${cop(r.acumulado)}</td><td>${html(r.origen||'Manual')}</td></tr>`).join('')
     }
 
-    function formatoCOP(valor) {
-      return new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        maximumFractionDigits: 0
-      }).format(valor);
+    function sugerencia(t,tipo='info'){return `<li class="${tipo}">${t}</li>`}
+    function analizarIA(){
+      const actual=calcular();const out=[];const incWeb=incrementoWeb(actual.grado);const histGrado=registros.filter(r=>r.grado===actual.grado);
+      $('mRegistros').textContent=registros.length;$('mPromedio').textContent=promedio(registros,'incremento').toFixed(2)+'%';$('mConfianza').textContent=confianza(registros.length);$('mFuente').textContent=modeloSalarial.fuente.includes('internet')?'Internet':'Semilla web';$('estadoIA').textContent=registros.length>=6?'Aprendizaje activo':'Base inicial cargada';
+      if(actual.basico<=0)out.push(sugerencia('Ingrese el básico actual. La IA no debe inferir el salario exacto sin tabla oficial verificable.','alert'));
+      if(actual.grado==='No especificado')out.push(sugerencia('Seleccione el grado para cruzar la simulación con el modelo salarial aprendido.','warning'));
+      if(incWeb>0){out.push(sugerencia(`Para ${html(actual.grado)}, el incremento salarial aprendido desde fuentes web es ${incWeb.toFixed(4)}%. Puede aplicarlo al campo de incremento.`, 'ok'));if(actual.incremento>0&&Math.abs(actual.incremento-incWeb)>=1){out.push(sugerencia(`El incremento ingresado difiere ${Math.abs(actual.incremento-incWeb).toFixed(2)} puntos porcentuales del valor web aprendido. Verifique el escenario o la fuente normativa.`, 'warning'))}}
+      else if(actual.grado!=='No especificado')out.push(sugerencia('No hay porcentaje web aprendido para este grado. Use actualización desde internet o registre manualmente el valor normativo.', 'warning'));
+      if(histGrado.length>=2){out.push(sugerencia(`Historial local para ${html(actual.grado)}: ${histGrado.length} registro(s), básico promedio ${cop(promedio(histGrado,'basico'))}, incremento promedio ${promedio(histGrado,'incremento').toFixed(4)}%.`, 'info'))}
+      if(actual.meses>12)out.push(sugerencia('La proyección supera 12 meses. Si corresponde a retroactivo o vigencia fiscal distinta, documente el periodo exacto.', 'warning'));
+      out.push(sugerencia('Use el resultado como referencia preliminar. Para documentos oficiales, contraste con decreto vigente, anexos salariales y factores prestacionales aplicables.', 'warning'));
+      $('sugerencias').innerHTML=out.join('');
     }
 
-    function escapeHTML(valor) {
-      return String(valor)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    function aplicarRedondeo(valor) {
-      const modo = Number($('redondeo').value);
-      if (!modo) return Math.round(valor);
-      return Math.round(valor / modo) * modo;
-    }
-
-    function calcular() {
-      const basico = limpiarNumero($('basico').value);
-      const incremento = Number($('incremento').value) || 0;
-      const meses = Math.max(1, Number($('meses').value) || 1);
-      const aumento = aplicarRedondeo(basico * (incremento / 100));
-      const nuevo = aplicarRedondeo(basico + aumento);
-      const acumulado = aplicarRedondeo(aumento * meses);
-
-      $('rBasico').textContent = formatoCOP(basico);
-      $('rAumento').textContent = formatoCOP(aumento);
-      $('rNuevo').textContent = formatoCOP(nuevo);
-      $('rAcumulado').textContent = formatoCOP(acumulado);
-
-      return {
-        referencia: $('nombre').value.trim() || 'Sin referencia',
-        grado: $('grado').value || 'No especificado',
-        basico,
-        incremento,
-        aumento,
-        nuevo,
-        meses,
-        acumulado,
-        fecha: new Date().toISOString()
+    function parsearPorcentajes(texto){
+      const base={...modeloSalarial.grados};
+      const patrones={
+        'General':['General'],'Mayor General':['Mayor general','Mayor General'],'Brigadier General':['Brigadier general','Brigadier General'],'Coronel':['Coronel'],'Teniente Coronel':['Teniente coronel','Teniente Coronel'],'Mayor':['Mayor'],'Capitán':['Capitán','Capitan'],'Teniente':['Teniente'],'Subteniente':['Subteniente'],
+        'Comisario':['Comisario'],'Subcomisario':['Subcomisario'],'Intendente Jefe':['Intendente Jefe'],'Intendente':['Intendente'],'Subintendente':['Subintendente'],'Patrullero':['Patrullero','Patrullero de Policía'],
+        'Agente menor a 5 años':['antigüedad inferior a 5 años','antiguedad inferior a 5 años'],'Agente 5 a 10 años':['5 años y hasta menos de 10','5 a 10 años'],'Agente 10 o más años':['10 o más años','10 o mas años']
       };
+      Object.entries(patrones).forEach(([grado,aliases])=>{for(const alias of aliases){const re=new RegExp(alias.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^0-9]{0,80}([0-9]{1,3}[,.][0-9]{2,4})\\s*%','i');const m=texto.match(re);if(m){base[grado]=Number(m[1].replace(',','.'));break}}});
+      return base;
     }
 
-    function renderTabla() {
-      if (!registros.length) {
-        tabla.innerHTML = '<tr><td colspan="8" class="empty">No hay simulaciones agregadas.</td></tr>';
-        return;
-      }
-
-      tabla.innerHTML = registros.map((r) => `
-        <tr>
-          <td>${escapeHTML(r.referencia)}</td>
-          <td>${escapeHTML(r.grado)}</td>
-          <td>${formatoCOP(r.basico)}</td>
-          <td>${Number(r.incremento).toFixed(2)}%</td>
-          <td>${formatoCOP(r.aumento)}</td>
-          <td>${formatoCOP(r.nuevo)}</td>
-          <td>${r.meses}</td>
-          <td>${formatoCOP(r.acumulado)}</td>
-        </tr>
-      `).join('');
+    async function leerFuente(url){
+      const directa=fetch(url,{mode:'cors'}).then(r=>r.ok?r.text():Promise.reject(new Error('HTTP '+r.status)));
+      const proxy=fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url)).then(r=>r.ok?r.text():Promise.reject(new Error('Proxy HTTP '+r.status)));
+      return Promise.any([directa,proxy]);
     }
 
-    function agregarRegistro() {
-      const dato = calcular();
-      if (dato.basico <= 0) {
-        alert('Ingrese un básico actual mensual válido.');
-        return;
-      }
-      if (dato.incremento <= 0) {
-        alert('Ingrese un porcentaje de incremento mayor a cero.');
-        return;
-      }
-      registros.push(dato);
-      guardarRegistros();
-      renderTabla();
-      analizarIA();
+    async function actualizarDesdeInternet(){
+      $('actualizarInternet').disabled=true;$('estadoInternet').textContent='Estado internet: consultando fuentes públicas...';
+      let combinado='';let ok=0;let errores=[];
+      for(const f of fuentesInternet){try{const txt=await leerFuente(f.url);combinado+='\n\nFUENTE: '+f.nombre+'\n'+txt;ok++}catch(e){errores.push(f.nombre+': '+e.message)}}
+      if(ok>0){modeloSalarial={fuente:'Internet público consultado '+new Date().toLocaleString('es-CO'),actualizado:new Date().toISOString(),grados:parsearPorcentajes(combinado)};guardar(MODEL_KEY,modeloSalarial);$('estadoInternet').textContent=`Estado internet: ${ok} fuente(s) leída(s). ${errores.length?('Advertencias: '+errores.join(' | ')):''}`}
+      else{$('estadoInternet').textContent='Estado internet: no fue posible leer las fuentes por bloqueo CORS o red. Se mantiene base semilla. '+errores.join(' | ')}
+      $('actualizarInternet').disabled=false;analizarIA();
     }
 
-    function promedio(lista, campo) {
-      if (!lista.length) return 0;
-      return lista.reduce((sum, item) => sum + Number(item[campo] || 0), 0) / lista.length;
+    async function consultarBackendIA(){
+      const endpoint=$('endpointIA').value.trim();if(!endpoint){alert('Ingrese la URL del backend IA.');return}
+      $('respuestaIA').textContent='Consultando backend IA...';
+      try{const body={simulacion:calcular(),historial:registros,modeloSalarial,fuentes:fuentesInternet};const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json().catch(()=>null);$('respuestaIA').textContent=data?.respuesta||data?.output_text||JSON.stringify(data,null,2)}catch(e){$('respuestaIA').textContent='No fue posible consultar el backend IA: '+e.message}
     }
 
-    function agruparPorGrado() {
-      return registros.reduce((mapa, item) => {
-        const grado = item.grado || 'No especificado';
-        if (!mapa[grado]) mapa[grado] = [];
-        mapa[grado].push(item);
-        return mapa;
-      }, {});
-    }
+    function exportarCSV(){if(!registros.length){alert('No hay registros para exportar.');return}const head=['Referencia','Grado','Basico actual','Incremento %','Aumento mensual','Nuevo basico','Meses','Acumulado','Origen','Fecha'];const rows=registros.map(r=>[r.referencia,r.grado,r.basico,r.incremento,r.aumento,r.nuevo,r.meses,r.acumulado,r.origen,r.fecha]);const csv=[head,...rows].map(row=>row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='simulador_incremento_basico_policia.csv';a.click();URL.revokeObjectURL(url)}
+    function limpiarTabla(){registros.length=0;guardar(STORAGE_KEY,registros);renderTabla();analizarIA()}
+    function reiniciar(){if(!confirm('¿Eliminar historial local y modelo aprendido desde internet?'))return;registros.length=0;localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(MODEL_KEY);modeloSalarial=modeloSemilla;renderTabla();analizarIA();$('estadoInternet').textContent='Estado internet: modelo reiniciado a base semilla.'}
+    function renderFuentes(){$('fuentes').innerHTML='<ol>'+fuentesInternet.map(f=>`<li><strong>${html(f.nombre)}:</strong> <a href="${f.url}" target="_blank" rel="noopener">${f.url}</a></li>`).join('')+'</ol><p><strong>Nota:</strong> priorice decreto, Diario Oficial o Gestor Normativo cuando se incorpore enlace oficial directo.</p>'}
 
-    function confianzaIA(total) {
-      if (total >= 12) return 'Alta';
-      if (total >= 6) return 'Media';
-      return 'Baja';
-    }
-
-    function claseConfianza(total) {
-      if (total >= 12) return 'Aprendizaje consolidado';
-      if (total >= 6) return 'Aprendizaje medio';
-      return 'Aprendizaje inicial';
-    }
-
-    function crearSugerencia(texto, tipo = 'info') {
-      return `<li class="${tipo}">${texto}</li>`;
-    }
-
-    function analizarIA() {
-      const actual = calcular();
-      const total = registros.length;
-      const sugerencias = [];
-      const incrementoPromedio = promedio(registros, 'incremento');
-      const basicoPromedio = promedio(registros, 'basico');
-      const aumentoPromedio = promedio(registros, 'aumento');
-      const grupos = agruparPorGrado();
-      const gradoActual = actual.grado;
-      const historicoGrado = grupos[gradoActual] || [];
-
-      $('mRegistros').textContent = total;
-      $('mPromedio').textContent = `${incrementoPromedio.toFixed(2)}%`;
-      $('mConfianza').textContent = confianzaIA(total);
-      $('estadoIA').textContent = claseConfianza(total);
-
-      if (actual.basico <= 0) {
-        sugerencias.push(crearSugerencia('Ingrese el básico actual para que el asistente pueda validar la simulación.', 'alert'));
-      }
-
-      if (actual.incremento <= 0) {
-        sugerencias.push(crearSugerencia('Ingrese un porcentaje de incremento mayor a cero. Sin ese dato no es posible proyectar el nuevo básico.', 'alert'));
-      }
-
-      if (actual.grado === 'No especificado') {
-        sugerencias.push(crearSugerencia('Seleccione el grado o categoría. Esto mejora el aprendizaje comparativo por grupo.', 'warning'));
-      }
-
-      if (actual.meses > 12) {
-        sugerencias.push(crearSugerencia('La proyección supera 12 meses. Revise si necesita separar el cálculo anual, retroactivo o plurianual.', 'warning'));
-      }
-
-      if (!total) {
-        sugerencias.push(crearSugerencia('Todavía no hay historial aprendido. Agregue varias simulaciones para que el asistente detecte patrones.', 'info'));
-      } else {
-        sugerencias.push(crearSugerencia(`Con ${total} registro(s), el incremento promedio aprendido es ${incrementoPromedio.toFixed(2)}% y el aumento mensual promedio es ${formatoCOP(aumentoPromedio)}.`, 'info'));
-
-        if (actual.basico > 0 && basicoPromedio > 0) {
-          const diferenciaBasico = ((actual.basico - basicoPromedio) / basicoPromedio) * 100;
-          if (Math.abs(diferenciaBasico) >= 25) {
-            const sentido = diferenciaBasico > 0 ? 'superior' : 'inferior';
-            sugerencias.push(crearSugerencia(`El básico actual ingresado es ${Math.abs(diferenciaBasico).toFixed(1)}% ${sentido} al promedio aprendido. Verifique que el valor corresponda al grado seleccionado.`, 'warning'));
-          }
-        }
-
-        if (actual.incremento > 0 && incrementoPromedio > 0) {
-          const diferenciaIncremento = actual.incremento - incrementoPromedio;
-          if (Math.abs(diferenciaIncremento) >= 2) {
-            const sentido = diferenciaIncremento > 0 ? 'por encima' : 'por debajo';
-            sugerencias.push(crearSugerencia(`El incremento ingresado está ${Math.abs(diferenciaIncremento).toFixed(2)} puntos porcentuales ${sentido} del promedio aprendido. Valide si corresponde al escenario que desea simular.`, 'warning'));
-          }
-        }
-
-        if (historicoGrado.length >= 2) {
-          const promedioGrado = promedio(historicoGrado, 'basico');
-          const incrementoGrado = promedio(historicoGrado, 'incremento');
-          sugerencias.push(crearSugerencia(`Para el grado ${escapeHTML(gradoActual)}, el sistema aprendió ${historicoGrado.length} registro(s), con básico promedio de ${formatoCOP(promedioGrado)} e incremento promedio de ${incrementoGrado.toFixed(2)}%.`, 'ok'));
-        } else if (gradoActual !== 'No especificado') {
-          sugerencias.push(crearSugerencia(`Hay pocos registros para el grado ${escapeHTML(gradoActual)}. Agregue más casos del mismo grado para mejorar la sugerencia específica.`, 'info'));
-        }
-
-        const mayorImpacto = [...registros].sort((a, b) => b.aumento - a.aumento)[0];
-        if (mayorImpacto) {
-          sugerencias.push(crearSugerencia(`El mayor impacto mensual aprendido corresponde a ${escapeHTML(mayorImpacto.grado)} con aumento estimado de ${formatoCOP(mayorImpacto.aumento)}.`, 'ok'));
-        }
-      }
-
-      sugerencias.push(crearSugerencia('Recomendación institucional: antes de usar el resultado en documentos administrativos, contraste el básico con la tabla salarial oficial y la norma vigente.', 'warning'));
-      $('sugerencias').innerHTML = sugerencias.join('');
-    }
-
-    function exportarCSV() {
-      if (!registros.length) {
-        alert('No hay registros para exportar.');
-        return;
-      }
-
-      const encabezados = ['Referencia', 'Grado', 'Basico actual', 'Incremento %', 'Aumento mensual', 'Nuevo basico', 'Meses', 'Acumulado', 'Fecha'];
-      const filas = registros.map((r) => [r.referencia, r.grado, r.basico, r.incremento, r.aumento, r.nuevo, r.meses, r.acumulado, r.fecha]);
-      const csv = [encabezados, ...filas]
-        .map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(';'))
-        .join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'simulador_incremento_basico_policia.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function limpiarTabla() {
-      registros.length = 0;
-      guardarRegistros();
-      renderTabla();
-      analizarIA();
-    }
-
-    function reiniciarAprendizaje() {
-      if (!confirm('¿Desea eliminar el historial aprendido por el asistente local?')) return;
-      registros.length = 0;
-      localStorage.removeItem(STORAGE_KEY);
-      renderTabla();
-      analizarIA();
-    }
-
-    $('calcular').addEventListener('click', () => {
-      calcular();
-      analizarIA();
-    });
-    $('agregar').addEventListener('click', agregarRegistro);
-    $('analizar').addEventListener('click', analizarIA);
-    $('exportar').addEventListener('click', exportarCSV);
-    $('limpiar').addEventListener('click', limpiarTabla);
-    $('resetIA').addEventListener('click', reiniciarAprendizaje);
-    $('basico').addEventListener('input', () => { calcular(); analizarIA(); });
-    $('incremento').addEventListener('input', () => { calcular(); analizarIA(); });
-    $('meses').addEventListener('input', () => { calcular(); analizarIA(); });
-    $('redondeo').addEventListener('change', () => { calcular(); analizarIA(); });
-    $('grado').addEventListener('change', analizarIA);
-
-    renderTabla();
-    calcular();
-    analizarIA();
+    ['basico','incremento','meses','redondeo','grado'].forEach(id=>$(id).addEventListener('input',()=>{calcular();analizarIA()}));
+    $('calcular').addEventListener('click',()=>{calcular();analizarIA()});$('aplicarWeb').addEventListener('click',aplicarIncrementoWeb);$('agregar').addEventListener('click',agregarRegistro);$('actualizarInternet').addEventListener('click',actualizarDesdeInternet);$('consultarBackend').addEventListener('click',consultarBackendIA);$('exportar').addEventListener('click',exportarCSV);$('limpiar').addEventListener('click',limpiarTabla);$('resetIA').addEventListener('click',reiniciar);
+    renderFuentes();renderTabla();calcular();analizarIA();
   </script>
 </body>
 </html>
