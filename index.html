@@ -3,18 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador de Incremento del Básico - Policía Nacional</title>
+  <title>Simulador Inteligente de Incremento del Básico - Policía Nacional</title>
   <style>
     :root {
       --verde: #0f4c3a;
       --verde-oscuro: #093426;
       --verde-claro: #e8f3ee;
       --dorado: #d7b56d;
+      --azul: #1849a9;
+      --azul-claro: #eff4ff;
       --gris: #f5f7f8;
       --texto: #1f2933;
       --muted: #667085;
       --borde: #d9e2ec;
       --rojo: #b42318;
+      --rojo-claro: #fff1f0;
+      --ambar: #b54708;
+      --ambar-claro: #fffaeb;
       --blanco: #ffffff;
       --sombra: 0 18px 45px rgba(15, 76, 58, 0.12);
     }
@@ -34,7 +39,7 @@
     header {
       background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
       color: var(--blanco);
-      padding: 34px 18px 42px;
+      padding: 34px 18px 44px;
       text-align: center;
     }
 
@@ -57,7 +62,7 @@
     }
 
     header p {
-      max-width: 820px;
+      max-width: 900px;
       margin: 16px auto 0;
       color: #dcefe7;
       font-size: 1rem;
@@ -65,13 +70,13 @@
     }
 
     main {
-      width: min(1180px, calc(100% - 28px));
+      width: min(1220px, calc(100% - 28px));
       margin: -28px auto 46px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.75fr);
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
       gap: 20px;
       align-items: start;
     }
@@ -127,10 +132,6 @@
       box-shadow: 0 0 0 4px rgba(15, 76, 58, 0.12);
     }
 
-    .full {
-      grid-column: 1 / -1;
-    }
-
     .actions {
       display: flex;
       gap: 10px;
@@ -161,8 +162,13 @@
       color: var(--verde-oscuro);
     }
 
+    .blue {
+      background: var(--azul-claro);
+      color: var(--azul);
+    }
+
     .danger {
-      background: #fff1f0;
+      background: var(--rojo-claro);
       color: var(--rojo);
     }
 
@@ -207,6 +213,93 @@
       font-size: 0.91rem;
     }
 
+    .ai-card {
+      margin-top: 20px;
+      border: 1px solid #b2ccff;
+      background: linear-gradient(135deg, #ffffff, #f5f8ff);
+    }
+
+    .ai-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .ai-chip {
+      display: inline-block;
+      border-radius: 999px;
+      background: var(--azul-claro);
+      color: var(--azul);
+      border: 1px solid #b2ccff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    .ai-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .metric {
+      padding: 12px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #d6e4ff;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin-bottom: 5px;
+    }
+
+    .metric strong {
+      color: var(--azul);
+      font-size: 1.05rem;
+    }
+
+    .suggestions {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .suggestions li {
+      padding: 12px 12px 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--borde);
+      background: #ffffff;
+      line-height: 1.42;
+      font-size: 0.92rem;
+    }
+
+    .suggestions li.info {
+      border-left: 5px solid var(--azul);
+    }
+
+    .suggestions li.ok {
+      border-left: 5px solid var(--verde);
+    }
+
+    .suggestions li.warning {
+      border-left: 5px solid var(--ambar);
+      background: var(--ambar-claro);
+    }
+
+    .suggestions li.alert {
+      border-left: 5px solid var(--rojo);
+      background: var(--rojo-claro);
+    }
+
     .table-card {
       margin-top: 20px;
     }
@@ -220,7 +313,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 760px;
+      min-width: 840px;
       background: var(--blanco);
     }
 
@@ -256,15 +349,23 @@
       padding: 20px;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 940px) {
       .grid {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 620px) {
-      .form-grid {
+    @media (max-width: 680px) {
+      .form-grid, .ai-metrics {
         grid-template-columns: 1fr;
+      }
+
+      .ai-head {
+        display: block;
+      }
+
+      .ai-chip {
+        margin-top: 10px;
       }
 
       .card {
@@ -272,17 +373,17 @@
       }
 
       main {
-        width: min(100% - 18px, 1180px);
+        width: min(100% - 18px, 1220px);
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <span class="badge">Herramienta de cálculo referencial</span>
-    <h1>Simulador de incremento del básico</h1>
+    <span class="badge">Herramienta de cálculo referencial con asistente inteligente local</span>
+    <h1>Simulador inteligente de incremento del básico</h1>
     <p>
-      Calcula de forma referencial el valor proyectado de la asignación básica mensual con un porcentaje de incremento. La herramienta permite comparar varios grados o funcionarios sin almacenar datos personales.
+      Calcula el valor proyectado de la asignación básica mensual con un porcentaje de incremento y genera sugerencias automáticas a partir del historial guardado en el navegador.
     </p>
   </header>
 
@@ -290,7 +391,7 @@
     <section class="grid" aria-label="Simulador principal">
       <article class="card">
         <h2>Datos de simulación</h2>
-        <p class="sub">Ingrese el valor actual del básico, el porcentaje de incremento y el número de meses a proyectar.</p>
+        <p class="sub">Ingrese el básico actual, el porcentaje de incremento y el número de meses a proyectar.</p>
 
         <div class="form-grid">
           <div>
@@ -348,9 +449,11 @@
 
         <div class="actions">
           <button class="primary" id="calcular">Calcular</button>
-          <button class="secondary" id="agregar">Agregar a tabla</button>
+          <button class="secondary" id="agregar">Agregar y aprender</button>
+          <button class="blue" id="analizar">Consultar IA local</button>
           <button class="secondary" id="exportar">Exportar CSV</button>
           <button class="danger" id="limpiar">Limpiar tabla</button>
+          <button class="danger" id="resetIA">Reiniciar aprendizaje</button>
         </div>
 
         <div class="note">
@@ -382,9 +485,38 @@
       </aside>
     </section>
 
+    <section class="card ai-card" aria-label="Asistente inteligente local">
+      <div class="ai-head">
+        <div>
+          <h2>Asistente IA local</h2>
+          <p class="sub">Aprende de las simulaciones guardadas en este navegador y genera recomendaciones operativas, validaciones y alertas de consistencia.</p>
+        </div>
+        <span class="ai-chip" id="estadoIA">Aprendizaje inicial</span>
+      </div>
+
+      <div class="ai-metrics">
+        <div class="metric">
+          <span>Registros aprendidos</span>
+          <strong id="mRegistros">0</strong>
+        </div>
+        <div class="metric">
+          <span>Incremento promedio</span>
+          <strong id="mPromedio">0%</strong>
+        </div>
+        <div class="metric">
+          <span>Confianza del análisis</span>
+          <strong id="mConfianza">Baja</strong>
+        </div>
+      </div>
+
+      <ul class="suggestions" id="sugerencias">
+        <li class="info">Ingrese datos y agregue simulaciones para que el asistente empiece a identificar patrones.</li>
+      </ul>
+    </section>
+
     <section class="card table-card">
       <h2>Comparativo de simulaciones</h2>
-      <p class="sub">Agregue varios registros para comparar el efecto del incremento por grado o referencia interna.</p>
+      <p class="sub">Agregue varios registros para comparar el efecto del incremento por grado o referencia interna. La tabla se conserva en este navegador.</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -414,7 +546,20 @@
   <script>
     const $ = (id) => document.getElementById(id);
     const tabla = $('tabla');
-    const registros = [];
+    const STORAGE_KEY = 'simulador_basico_policia_registros_v2';
+    const registros = cargarRegistros();
+
+    function cargarRegistros() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function guardarRegistros() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registros));
+    }
 
     function limpiarNumero(valor) {
       return Number(String(valor || '').replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -426,6 +571,15 @@
         currency: 'COP',
         maximumFractionDigits: 0
       }).format(valor);
+    }
+
+    function escapeHTML(valor) {
+      return String(valor)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
     }
 
     function aplicarRedondeo(valor) {
@@ -455,7 +609,8 @@
         aumento,
         nuevo,
         meses,
-        acumulado
+        acumulado,
+        fecha: new Date().toISOString()
       };
     }
 
@@ -467,10 +622,10 @@
 
       tabla.innerHTML = registros.map((r) => `
         <tr>
-          <td>${r.referencia}</td>
-          <td>${r.grado}</td>
+          <td>${escapeHTML(r.referencia)}</td>
+          <td>${escapeHTML(r.grado)}</td>
           <td>${formatoCOP(r.basico)}</td>
-          <td>${r.incremento.toFixed(2)}%</td>
+          <td>${Number(r.incremento).toFixed(2)}%</td>
           <td>${formatoCOP(r.aumento)}</td>
           <td>${formatoCOP(r.nuevo)}</td>
           <td>${r.meses}</td>
@@ -485,8 +640,115 @@
         alert('Ingrese un básico actual mensual válido.');
         return;
       }
+      if (dato.incremento <= 0) {
+        alert('Ingrese un porcentaje de incremento mayor a cero.');
+        return;
+      }
       registros.push(dato);
+      guardarRegistros();
       renderTabla();
+      analizarIA();
+    }
+
+    function promedio(lista, campo) {
+      if (!lista.length) return 0;
+      return lista.reduce((sum, item) => sum + Number(item[campo] || 0), 0) / lista.length;
+    }
+
+    function agruparPorGrado() {
+      return registros.reduce((mapa, item) => {
+        const grado = item.grado || 'No especificado';
+        if (!mapa[grado]) mapa[grado] = [];
+        mapa[grado].push(item);
+        return mapa;
+      }, {});
+    }
+
+    function confianzaIA(total) {
+      if (total >= 12) return 'Alta';
+      if (total >= 6) return 'Media';
+      return 'Baja';
+    }
+
+    function claseConfianza(total) {
+      if (total >= 12) return 'Aprendizaje consolidado';
+      if (total >= 6) return 'Aprendizaje medio';
+      return 'Aprendizaje inicial';
+    }
+
+    function crearSugerencia(texto, tipo = 'info') {
+      return `<li class="${tipo}">${texto}</li>`;
+    }
+
+    function analizarIA() {
+      const actual = calcular();
+      const total = registros.length;
+      const sugerencias = [];
+      const incrementoPromedio = promedio(registros, 'incremento');
+      const basicoPromedio = promedio(registros, 'basico');
+      const aumentoPromedio = promedio(registros, 'aumento');
+      const grupos = agruparPorGrado();
+      const gradoActual = actual.grado;
+      const historicoGrado = grupos[gradoActual] || [];
+
+      $('mRegistros').textContent = total;
+      $('mPromedio').textContent = `${incrementoPromedio.toFixed(2)}%`;
+      $('mConfianza').textContent = confianzaIA(total);
+      $('estadoIA').textContent = claseConfianza(total);
+
+      if (actual.basico <= 0) {
+        sugerencias.push(crearSugerencia('Ingrese el básico actual para que el asistente pueda validar la simulación.', 'alert'));
+      }
+
+      if (actual.incremento <= 0) {
+        sugerencias.push(crearSugerencia('Ingrese un porcentaje de incremento mayor a cero. Sin ese dato no es posible proyectar el nuevo básico.', 'alert'));
+      }
+
+      if (actual.grado === 'No especificado') {
+        sugerencias.push(crearSugerencia('Seleccione el grado o categoría. Esto mejora el aprendizaje comparativo por grupo.', 'warning'));
+      }
+
+      if (actual.meses > 12) {
+        sugerencias.push(crearSugerencia('La proyección supera 12 meses. Revise si necesita separar el cálculo anual, retroactivo o plurianual.', 'warning'));
+      }
+
+      if (!total) {
+        sugerencias.push(crearSugerencia('Todavía no hay historial aprendido. Agregue varias simulaciones para que el asistente detecte patrones.', 'info'));
+      } else {
+        sugerencias.push(crearSugerencia(`Con ${total} registro(s), el incremento promedio aprendido es ${incrementoPromedio.toFixed(2)}% y el aumento mensual promedio es ${formatoCOP(aumentoPromedio)}.`, 'info'));
+
+        if (actual.basico > 0 && basicoPromedio > 0) {
+          const diferenciaBasico = ((actual.basico - basicoPromedio) / basicoPromedio) * 100;
+          if (Math.abs(diferenciaBasico) >= 25) {
+            const sentido = diferenciaBasico > 0 ? 'superior' : 'inferior';
+            sugerencias.push(crearSugerencia(`El básico actual ingresado es ${Math.abs(diferenciaBasico).toFixed(1)}% ${sentido} al promedio aprendido. Verifique que el valor corresponda al grado seleccionado.`, 'warning'));
+          }
+        }
+
+        if (actual.incremento > 0 && incrementoPromedio > 0) {
+          const diferenciaIncremento = actual.incremento - incrementoPromedio;
+          if (Math.abs(diferenciaIncremento) >= 2) {
+            const sentido = diferenciaIncremento > 0 ? 'por encima' : 'por debajo';
+            sugerencias.push(crearSugerencia(`El incremento ingresado está ${Math.abs(diferenciaIncremento).toFixed(2)} puntos porcentuales ${sentido} del promedio aprendido. Valide si corresponde al escenario que desea simular.`, 'warning'));
+          }
+        }
+
+        if (historicoGrado.length >= 2) {
+          const promedioGrado = promedio(historicoGrado, 'basico');
+          const incrementoGrado = promedio(historicoGrado, 'incremento');
+          sugerencias.push(crearSugerencia(`Para el grado ${escapeHTML(gradoActual)}, el sistema aprendió ${historicoGrado.length} registro(s), con básico promedio de ${formatoCOP(promedioGrado)} e incremento promedio de ${incrementoGrado.toFixed(2)}%.`, 'ok'));
+        } else if (gradoActual !== 'No especificado') {
+          sugerencias.push(crearSugerencia(`Hay pocos registros para el grado ${escapeHTML(gradoActual)}. Agregue más casos del mismo grado para mejorar la sugerencia específica.`, 'info'));
+        }
+
+        const mayorImpacto = [...registros].sort((a, b) => b.aumento - a.aumento)[0];
+        if (mayorImpacto) {
+          sugerencias.push(crearSugerencia(`El mayor impacto mensual aprendido corresponde a ${escapeHTML(mayorImpacto.grado)} con aumento estimado de ${formatoCOP(mayorImpacto.aumento)}.`, 'ok'));
+        }
+      }
+
+      sugerencias.push(crearSugerencia('Recomendación institucional: antes de usar el resultado en documentos administrativos, contraste el básico con la tabla salarial oficial y la norma vigente.', 'warning'));
+      $('sugerencias').innerHTML = sugerencias.join('');
     }
 
     function exportarCSV() {
@@ -495,9 +757,11 @@
         return;
       }
 
-      const encabezados = ['Referencia', 'Grado', 'Basico actual', 'Incremento %', 'Aumento mensual', 'Nuevo basico', 'Meses', 'Acumulado'];
-      const filas = registros.map((r) => [r.referencia, r.grado, r.basico, r.incremento, r.aumento, r.nuevo, r.meses, r.acumulado]);
-      const csv = [encabezados, ...filas].map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(';')).join('\n');
+      const encabezados = ['Referencia', 'Grado', 'Basico actual', 'Incremento %', 'Aumento mensual', 'Nuevo basico', 'Meses', 'Acumulado', 'Fecha'];
+      const filas = registros.map((r) => [r.referencia, r.grado, r.basico, r.incremento, r.aumento, r.nuevo, r.meses, r.acumulado, r.fecha]);
+      const csv = [encabezados, ...filas]
+        .map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(';'))
+        .join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -509,19 +773,37 @@
 
     function limpiarTabla() {
       registros.length = 0;
+      guardarRegistros();
       renderTabla();
+      analizarIA();
     }
 
-    $('calcular').addEventListener('click', calcular);
+    function reiniciarAprendizaje() {
+      if (!confirm('¿Desea eliminar el historial aprendido por el asistente local?')) return;
+      registros.length = 0;
+      localStorage.removeItem(STORAGE_KEY);
+      renderTabla();
+      analizarIA();
+    }
+
+    $('calcular').addEventListener('click', () => {
+      calcular();
+      analizarIA();
+    });
     $('agregar').addEventListener('click', agregarRegistro);
+    $('analizar').addEventListener('click', analizarIA);
     $('exportar').addEventListener('click', exportarCSV);
     $('limpiar').addEventListener('click', limpiarTabla);
-    $('basico').addEventListener('input', calcular);
-    $('incremento').addEventListener('input', calcular);
-    $('meses').addEventListener('input', calcular);
-    $('redondeo').addEventListener('change', calcular);
+    $('resetIA').addEventListener('click', reiniciarAprendizaje);
+    $('basico').addEventListener('input', () => { calcular(); analizarIA(); });
+    $('incremento').addEventListener('input', () => { calcular(); analizarIA(); });
+    $('meses').addEventListener('input', () => { calcular(); analizarIA(); });
+    $('redondeo').addEventListener('change', () => { calcular(); analizarIA(); });
+    $('grado').addEventListener('change', analizarIA);
 
+    renderTabla();
     calcular();
+    analizarIA();
   </script>
 </body>
 </html>
